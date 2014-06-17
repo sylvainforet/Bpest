@@ -42,12 +42,20 @@ We haven't specified the {\tt column} variable so the function {\tt estimatePatt
 The parameter {\tt epsilon} is 0.01, while the parameter {\tt eta} is not specified and by default is 0. 
 Two plots are produced: the lower plot is the expanded version of the upper plot.
 
-<<fig=TRUE>>=
+<<>>=
 library(Bpest)
 data(patternsExample)
 patternsExample
 estimatePatterns(patternsExample, epsilon=0.01)
 @
+
+\begin{figure}[ht]
+\caption{}
+\begin{center}
+\includegraphics[keepaspectratio=true,scale=0.8]{patternDistribution.pdf}
+\label{fig:1}
+\end{center}
+\end{figure}
 
 In the following example we still use the same input table but instead now specify {\tt column = 2}. 
 We set variables {\tt epsilon=0.005}, {\tt eta=c(0.008, 0.01, 0.01, 0.01, 0.008)} (denoting different error rate at each site) and {\tt yLimit2=0.04}.

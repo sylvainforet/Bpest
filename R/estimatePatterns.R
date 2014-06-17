@@ -1,55 +1,90 @@
 estimatePatterns <- function(patternCounts,
-                             epsilon,
+                             epsilon=0,
                              eta=0,
-                             column=1,
+                             column=-1,
                              fast=TRUE,
                              steps=20000,
                              plot=TRUE,
                              yLimit1=-1,
-                             yLimit2=-1)
+                             yLimit2=-1,
+                             plotPath='patternDistribution.pdf')
 {
-
-    # Arguments checks
-
-    if (!is.numeric(epsilon)) {
-        stop("epsilon must be numeric\n")
+    # Check the patterns
+    # First, strip any leading character different from 01
+    patterns <- gsub('^[^01]', '', as.character(patternCounts[, 1]))
+    # Make sure we only have zeros and ones:
+    matches <- grep('[01]+', patterns, invert=TRUE)
+    if (length(matches) > 0) {
+        stop('Only 0s and 1s allowed in pattern. First (up to ten) offending patterns:', head(patterns[matches], 10), '\n')
+    }
+    # Make sure that all patterns have the same length
+    nCpGsites <- nchar(patterns[1])
+    if (any(nchar(patterns) != nCpGsites)) {
+        stop('All patterns must be the same length\n')
     }
 
-    if (epsilon < 0 || epsilon >= 1) {
-        stop("epsilon must be between 0 and 1\n")
+    patternCounts[, 1] <- patterns
+    # Check Epsilon
+    if (!is.numeric(epsilon) || epsilon < 0 || epsilon >= 1) {
+        stop('Epsilon must be a numeric between 0 and 1\n')
     }
 
-    if (!is.element(column, 1:(ncol(patternCounts) - 1))) {
-        stop("column beyond allowed range\n")
+    # Check Eta
+    nEtas <- length(eta)
+    if (nEtas != 1 && nEtas != nCpGsites) {
+        stop('Length of eta is not equal to the number of CpG sites\n')
+    } else if (!is.numeric(eta) || any(eta < 0 || eta >= 1)) {
+        stop('Eta must be a numeric between 0 and 1\n')
+    }
+
+    # Check the column indices
+    nColumns <- ncol(patternCounts) - 1
+    if (column == -1) {
+        columns <- 1:nColumns
+    } else {
+        columns <- column
+    }
+    if (any(columns < 1 || columns > nColumns)) {
+        stop('Column indices must be between 1 and', nColumns, '\n')
     }
 
     options(scipen=999)
 
-    # Read the data
-
-    patternCounts <- subset(patternCounts, select=c(1, column+1))
-    names(patternCounts) <- c("Patterns","Counts")
-    patternCounts <- patternCounts[patternCounts$Counts!=0,]
-    ### FIXME implement proper checks of the patterns format
-    trim <- function (x) gsub("[#%$*()&a-zA-Z ]", "", x) #removes all extra symbols.
-    patternCounts$Patterns <- trim(as.character(patternCounts$Patterns))
-    nCpGsites <- nchar(patternCounts$Patterns[1])
-
-    # Eta input
-
-    if (length(eta) == 1) {
-        if (eta < 1 && eta >= 0) {
-            eta <- rep(eta, nCpGsites)
-        } else {
-            stop("eta must be between 0 and 1\n")
-        }
-    } else {
-        if (length(eta) != nCpGsites) {
-            stop("length of eta is not equal to the number of CpG sites\n")
-        } else if (any(eta < 0 || eta >= 1)) {
-            stop("eta must be between 0 and 1\n")
-        }
+    compareData <- list()
+    for (i in columns) {
+        compareData[[i]] <- estimatePatternsOneColumn(patternCounts,
+                                                      epsilon,
+                                                      eta,
+                                                      column=i,
+                                                      fast,
+                                                      steps)
     }
+
+    if (plot) {
+        pdf(plotPath)
+        for (i in columns) {
+            plotGraph(compareData[[i]], yLimit1, yLimit2)
+        }
+        dev.off()
+    }
+
+    if (length(columns) == 1) {
+        compareData <- compareData[[1]]
+    }
+    return(compareData)
+}
+
+estimatePatternsOneColumn <- function(patternCounts,
+                                      epsilon,
+                                      eta,
+                                      column,
+                                      fast,
+                                      steps)
+{
+    patternCounts <- patternCounts[, c(1, column + 1)]
+    names(patternCounts) <- c('Patterns','Counts')
+    patternCounts <- patternCounts[patternCounts$Counts !=0, ]
+    nCpGsites <- nchar(patternCounts$Patterns[1])
 
     # Create the vector of patterns
 
@@ -58,14 +93,14 @@ estimatePatterns <- function(patternCounts,
     } else {
             binary <- function(x) if (all(x < 2)) x else cbind(binary(x %/% 2), x %% 2)
             cytosineBinary <- binary(0:(2 ^ nCpGsites - 1))
-            mPattern <- array(dim=c(2^nCpGsites,1))
-            for(i in 1:(2 ^ nCpGsites)){
-                mPattern[i, 1] <- paste(cytosineBinary[i, ], collapse="")
+            mPattern <- array(dim=c(2^nCpGsites, 1))
+            for(i in 1:(2 ^ nCpGsites)) {
+                mPattern[i, 1] <- paste(cytosineBinary[i, ], collapse='')
             }
             counts <- array(0, dim=c(2^nCpGsites,1))
             methData <- data.frame(Patterns=mPattern, Counts=counts)
             methData$Patterns <- as.character(methData$Patterns)
-            for(i in 1:(2 ^ nCpGsites)){
+            for(i in 1:(2 ^ nCpGsites)) {
                 patternMatches <- patternCounts$Patterns == mPattern[i, 1]
                 if(any(patternMatches)) {
                     methData[i, 2] <- patternCounts[patternMatches, 2]
@@ -118,7 +153,7 @@ estimatePatterns <- function(patternCounts,
                                          eta[i],
                                          epsilon + eta[i]- 2 * epsilon * eta[i],
                                          1 - eta[i]),
-                                       dim=c(2,2))
+                                       dim=c(2, 2))
         }
         conversionMatrix <- 1
         for (i in 1:nCpGsites) {
@@ -163,7 +198,7 @@ estimatePatterns <- function(patternCounts,
     opt <- constrOptim(startingVector, likelihoodOpt, grad=NULL,
                         ui=constraintMatrix,
                         ci=constraintVector,
-                        method="Nelder-Mead",
+                        method='Nelder-Mead',
                         control=list(maxit=steps))
 
     recovered <- expand(opt$par, patternsMax)
@@ -202,10 +237,13 @@ estimatePatterns <- function(patternCounts,
 
     compareData$spurious <- compareData$observedDistribution !=0 & compareData$estimatedDistribution == 0
 
+    return(compareData)
+}
 
 # Plot graphs.
 
-    if(plot){
+plotGraph <- function(compareData, yLimit1, yLimit2)
+{
       if(yLimit1 ==-1 ){
         yLimit1 <- ceiling(max(compareData$observedDistribution, compareData$estimatedDistribution) * 10.2) / 10
       }
@@ -219,8 +257,8 @@ estimatePatterns <- function(patternCounts,
       plot(compareData$estimatedDistribution,
            pch=4,
            col='white',
-           xlab="pattern",
-           ylab="proportion",
+           xlab='pattern',
+           ylab='proportion',
            cex.lab=1.5,
            ylim=c(0, yLimit1))
       points(compareData$estimatedDistribution, pch=4, col='red')
@@ -228,24 +266,24 @@ estimatePatterns <- function(patternCounts,
       plot(compareData$Coverage,
            col='blue',
            pch=3,
-           xlab="",
-           ylab="",
+           xlab='',
+           ylab='',
            ylim=c(0, sum(compareData$Coverage) * yLimit1),
            axes=FALSE)
       axis(side=4)
-      mtext("coverage", side=4, line=2.5)
-      abline(0, 0, col="grey")
+      mtext('coverage', side=4, line=2.5)
+      abline(0, 0, col='grey')
 
       par(mar=c(0, 0, 0, 5))
       plot.new()
-      legend('right', c("observed distribution","estimated distribution"), pch=c(3,4), col=c("BLUE", "RED"))
+      legend('right', c('observed distribution','estimated distribution'), pch=c(3,4), col=c('BLUE', 'RED'))
 
       par(mar=c(5.4, 5, 2, 5))
       plot(compareData$estimatedDistribution,
            pch=4,
            col='white',
-           xlab="pattern",
-           ylab="proportion",
+           xlab='pattern',
+           ylab='proportion',
            cex.lab=1.5,
            ylim=c(0, yLimit2))
       points(compareData$estimatedDistribution, pch=4, col='red')
@@ -253,16 +291,13 @@ estimatePatterns <- function(patternCounts,
       plot(compareData$Coverage,
            col='blue',
            pch=3,
-           xlab="",
-           ylab="",
+           xlab='',
+           ylab='',
            ylim=c(0,sum(compareData$Coverage)*yLimit2),
            axes=FALSE)
       axis(side=4, at=c(compareData$Coverage, 0, 10))
-      mtext("coverage", side=4, line=2.5)
-      abline(0, 0, col="grey")
-    }
-
-    return(compareData)
+      mtext('coverage', side=4, line=2.5)
+      abline(0, 0, col='grey')
 }
 
-# vim:ft=r:ts=2:sw=2:sts=2:expandtab:
+# vim:ft=r:ts=4:sw=4:sts=4:expandtab:
