@@ -3,11 +3,7 @@ estimatePatterns <- function(patternCounts,
                              eta=0,
                              column=-1,
                              fast=TRUE,
-                             steps=20000,
-                             plot=TRUE,
-                             yLimit1=-1,
-                             yLimit2=-1,
-                             plotPath='patternDistribution.pdf')
+                             steps=20000)
 {
     # Check the patterns
     # First, strip any leading character different from 01
@@ -45,10 +41,8 @@ estimatePatterns <- function(patternCounts,
         columns <- column
     }
     if (any(columns < 1 || columns > nColumns)) {
-        stop('Column indices must be between 1 and', nColumns, '\n')
+        stop('Column indices must be between 1 and ', nColumns, '\n')
     }
-
-    options(scipen=999)
 
     compareData <- list()
     for (i in columns) {
@@ -58,18 +52,6 @@ estimatePatterns <- function(patternCounts,
                                                       column=i,
                                                       fast,
                                                       steps)
-    }
-
-    if (plot) {
-        pdf(plotPath)
-        for (i in columns) {
-            plotGraph(compareData[[i]], yLimit1, yLimit2)
-        }
-        dev.off()
-    }
-
-    if (length(columns) == 1) {
-        compareData <- compareData[[1]]
     }
     return(compareData)
 }
@@ -168,11 +150,11 @@ estimatePatternsOneColumn <- function(patternCounts,
     likelihood <- function(theta) {
         phi <- theta %*% conversionMatrix
         if (fast) {
-            likelihood <- -sum(yPatterns * log(as.vector(phi)))
+            lhd <- -sum(yPatterns * log(as.vector(phi)))
         } else {
-            likelihood <- -sum(yPatterns[yPatterns != 0] * log(phi[yPatterns != 0]))
+            lhd <- -sum(yPatterns[yPatterns != 0] * log(phi[yPatterns != 0]))
         }
-        return(likelihood)
+        return(lhd)
     }
 
     expand <- function(theta, patternsMax) {
@@ -242,7 +224,7 @@ estimatePatternsOneColumn <- function(patternCounts,
 
 # Plot graphs.
 
-plotGraph <- function(compareData, yLimit1, yLimit2)
+plotMethylationPatterns <- function(compareData, yLimit1=-1, yLimit2=-1)
 {
       if(yLimit1 ==-1 ){
         yLimit1 <- ceiling(max(compareData$observedDistribution, compareData$estimatedDistribution) * 10.2) / 10

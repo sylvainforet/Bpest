@@ -49,14 +49,6 @@ patternsExample
 estimatePatterns(patternsExample, epsilon=0.01)
 @
 
-\begin{figure}[ht]
-\caption{}
-\begin{center}
-\includegraphics[keepaspectratio=true,scale=0.8]{patternDistribution.pdf}
-\label{fig:1}
-\end{center}
-\end{figure}
-
 In the following example we still use the same input table but instead now specify {\tt column = 2}. 
 We set variables {\tt epsilon=0.005}, {\tt eta=c(0.008, 0.01, 0.01, 0.01, 0.008)} (denoting different error rate at each site) and {\tt yLimit2=0.04}.
 We also turn off the plotting.
@@ -65,9 +57,7 @@ We also turn off the plotting.
 estimatePatterns(patternsExample,
                  epsilon=0.01, 
                  eta=c(0.008, 0.01, 0.01, 0.01, 0.008), 
-                 column=2,
-                 yLimit2=0.04,
-                 plot=FALSE)
+                 column=2)
 @
 
 Note that in this example four patterns have been identified as spurious; they are patterns {\tt 01010}, {\tt 10001}, {\tt 10010} and {\tt 11000}.
