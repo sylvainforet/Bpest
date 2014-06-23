@@ -42,7 +42,7 @@ We haven't specified the {\tt column} variable so the function {\tt estimatePatt
 The parameter {\tt epsilon} is 0.01, while the parameter {\tt eta} is not specified and by default is 0. 
 Two plots are produced: the lower plot is the expanded version of the upper plot.
 
-<<fig=TRUE>>=
+<<>>=
 library(Bpest)
 data(patternsExample)
 patternsExample
@@ -57,9 +57,7 @@ We also turn off the plotting.
 estimatePatterns(patternsExample,
                  epsilon=0.01, 
                  eta=c(0.008, 0.01, 0.01, 0.01, 0.008), 
-                 column=2,
-                 yLimit2=0.04,
-                 plot=FALSE)
+                 column=2)
 @
 
 Note that in this example four patterns have been identified as spurious; they are patterns {\tt 01010}, {\tt 10001}, {\tt 10010} and {\tt 11000}.
