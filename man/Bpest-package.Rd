@@ -23,7 +23,7 @@
 }
 
 \author{
-  Peijie Lin, Sylvain Foret, Conrad Burden
+  Peijie Lin, Sylvain Forêt, Conrad Burden
 
   Maintainer: conrad.burden@anu.edu.au
 }
@@ -45,7 +45,7 @@
   data(patternsExample)
   estimates <- estimatePatterns(patternsExample, epsilon=0.02, eta=0.01)
   estimates
-  plotMethylationPatterns(estimates[[2]])
+  plotPatterns(estimates[[2]])
 }
 
 % vim:ts=2:sw=2:sts=2:expandtab:

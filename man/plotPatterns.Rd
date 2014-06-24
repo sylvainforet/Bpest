@@ -1,5 +1,5 @@
-\name{plotMethylationPatterns}
-\alias{plotMethylationPatterns}
+\name{plotPatterns}
+\alias{plotPatterns}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
   Plot methylation pattern distribution
@@ -8,7 +8,7 @@
   Plot the observed distribution and the estimated distribution of the methylation patterns
 }
 \usage{
-  plotMethylationPatterns(compareData, yLimit1=NULL, yLimit2=NULL)
+  plotPatterns(compareData, yLimit1=NULL, yLimit2=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -52,13 +52,13 @@
   estimates <- estimatePatterns(patternsExample, 
                                 epsilon=0.02, 
                                 eta=0.01)
-  plotMethylationPatterns(estimates[[1]])
+  plotPatterns(estimates[[1]])
   
   estimates1 <- estimatePatterns(patternsExample, 
                                  epsilon=0.02, 
                                  eta=0.01, 
                                  column=1)
-  plotMethylationPatterns(estimates1, yLimit2=0.05)
+  plotPatterns(estimates1, yLimit2=0.05)
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the

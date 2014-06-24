@@ -229,7 +229,7 @@ estimatePatternsOneColumn <- function(patternCounts,
 
 # Plot graphs.
 
-plotMethylationPatterns <- function(compareData, yLimit1=NULL, yLimit2=NULL)
+plotPatterns <- function(compareData, yLimit1=NULL, yLimit2=NULL)
 {
       if(class(compareData) != "data.frame"){
         stop("compareData must be a data.frame")

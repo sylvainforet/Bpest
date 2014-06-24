@@ -39,9 +39,10 @@ array with length equal to the number of CpG sites in the amplicon.
 The boolean variable {\tt fast} enables either a fast implementation (default) which ignores those patterns for which the observed read count is zero or a slow implementation.
 The parameter {\tt steps} is passed to the function {\tt constrOptim()} to control the accuracy of the determination of the maximum log-likelihood.
 
-A second function in the package is {\tt plotMethylationPatterns()}. 
-Input to this function is a data frame, obtained from the output of {\tt estimatePatterns()}. 
-The output of {\tt plotMethylationPatterns()} is a plot that compares the observed read distribution with the estimated distribution.
+A second function in the package is {\tt plotPatterns()}. 
+Input to this function is a data frame, 
+obtained from the output of {\tt estimatePatterns()}. 
+The output of {\tt plotPatterns()} is a plot that compares the observed read distribution with the estimated distribution.
 The parameters {\tt yLimit1} and  {\tt yLimit2} control the range of the y-axis on the plots produced.
 
 In the following example, the input is the table of counts {\tt patternsExample}.
@@ -64,8 +65,8 @@ The sequencing error rate {\tt eta} is specified as a site-dependent array.
 
 <<>>=
 estimates <- estimatePatterns(patternsExample,
-                 epsilon=0.01, 
-                 eta=c(0.008, 0.01, 0.01, 0.01, 0.008))
+                              epsilon=0.01, 
+                              eta=c(0.008, 0.01, 0.01, 0.01, 0.008))
 estimates
 @
 
@@ -75,7 +76,7 @@ Two plots are produced: the lower plot is the expanded version of the upper plot
 
 
 <<fig=TRUE>>=
-plotMethylationPatterns(estimates[[2]])
+plotPatterns(estimates[[2]])
 @
 
 \begin{thebibliography}{}
