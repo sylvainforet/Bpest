@@ -8,7 +8,7 @@
 }
 
 \description{
-  Estimate distribution of methylation patterns from a table of counts from a bisulphite sequencing experiment given a non-conversion rate and read error rate.
+  Estimate distribution of methylation patterns from a table of counts from a bisulphite sequencing experiment given a non-conversion rate and sequencing error rate.
 }
 
 \details{
@@ -23,7 +23,7 @@
 }
 
 \author{
-  Peijie Lin, Sylvain Forêt, Conrad Burden
+  Peijie Lin, Sylvain Foret, Conrad Burden
 
   Maintainer: conrad.burden@anu.edu.au
 }
@@ -43,7 +43,9 @@
 
 \examples{
   data(patternsExample)
-  estimatePatterns(patternsExample, epsilon=0.02, eta=0.01, column=2)
+  estimates <- estimatePatterns(patternsExample, epsilon=0.02, eta=0.01)
+  estimates
+  plotMethylationPatterns(estimates[[2]])
 }
 
 % vim:ts=2:sw=2:sts=2:expandtab:

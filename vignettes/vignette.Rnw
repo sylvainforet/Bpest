@@ -29,37 +29,58 @@ These PCR products (called amplicons) can be mapped to a reference and methylati
 
 However, the bisulphite conversion is not 100\% efficient, and this introduces errors in the observed distribution of methylation patterns.
 A second source of errors is the sequencing error.
-{\tt Bpest} (for \textbf{B}isulphite \textbf{p}attern \textbf{est}imator) calculates the estimated distribution over methylation patterns based on an input of methylation pattern count data, an incomplete conversion rate and site-dependent read error rates.
+{\tt Bpest} (for \textbf{B}isulphite \textbf{p}attern \textbf{est}imator)~\cite{Lin04} calculates the estimated distribution over methylation patterns based on an input of methylation pattern count data, an incomplete conversion rate and site-dependent read error rates.
 
-The main component of the package is the function {\tt estimatePatterns()}, which generates a table of estimates $\hat\theta_i$ of the distribution over methylation patterns, a plot that compares the observed read distribution with the estimated distribution, and a list of patterns identified as spurious.
-Input to the function is a data frame {\tt patternCounts} listing the methylation patterns in the first column followed by a number of columns of count data (one column per sample).
-Estimation will be performed on the column specified by the variable {\tt column} using the non-conversion and error rates specified by the parameters {\tt epsilon} and {\tt eta} respectively.
-The boolean variable {\tt fast} enables either a fast implementation (default) which ignores those patterns for which the observed read count is zero or a slow impementation.
-The parameter {\tt steps} is passed to the function {\tt constrOptim()} to control the accuracy of the determination of the maximum log-likelihood, and {\tt yLimit1} and  {\tt yLimit2} control the range of the y-axis on the plots produced.
+The main component of the package is the function {\tt estimatePatterns()}, which generates a table of estimates $\hat\theta_i$ of the distribution over methylation patterns, and a list of patterns identified as spurious.
+Input to the function is a data frame listing the methylation patterns in the first column followed by a number of columns of count data (one column per sample). 
+Estimation will be performed on all columns by default unless specified by the variable {\tt column}. The non-conversion and sequencing error rates are specified by the parameters {\tt epsilon} and {\tt eta} respectively. 
+The parameter {\tt eta} can be specified globally or as a site-dependent 
+array with length equal to the number of CpG sites in the amplicon. 
+The boolean variable {\tt fast} enables either a fast implementation (default) which ignores those patterns for which the observed read count is zero or a slow implementation.
+The parameter {\tt steps} is passed to the function {\tt constrOptim()} to control the accuracy of the determination of the maximum log-likelihood.
+
+A second function in the package is {\tt plotMethylationPatterns()}. 
+Input to this function is a data frame, obtained from the output of {\tt estimatePatterns()}. 
+The output of {\tt plotMethylationPatterns()} is a plot that compares the observed read distribution with the estimated distribution.
+The parameters {\tt yLimit1} and  {\tt yLimit2} control the range of the y-axis on the plots produced.
 
 In the following example, the input is the table of counts {\tt patternsExample}.
-We haven't specified the {\tt column} variable so the function {\tt estimatePatterns()} by default applies to the first column of counts.
+We analyse the second column.
 The parameter {\tt epsilon} is 0.01, while the parameter {\tt eta} is not specified and by default is 0. 
-Two plots are produced: the lower plot is the expanded version of the upper plot.
 
 <<>>=
 library(Bpest)
 data(patternsExample)
 patternsExample
-estimatePatterns(patternsExample, epsilon=0.01)
+estimatePatterns(patternsExample, epsilon=0.01, column=2)
 @
 
-In the following example we still use the same input table but instead now specify {\tt column = 2}. 
-We set variables {\tt epsilon=0.005}, {\tt eta=c(0.008, 0.01, 0.01, 0.01, 0.008)} (denoting different error rate at each site) and {\tt yLimit2=0.04}.
-We also turn off the plotting.
+Note that in this example two patterns have been identified as spurious; they are patterns {\tt 01010} and {\tt 11000}.
+
+The following example uses the same input table. 
+The {\tt column} variable is not specified, 
+so the function {\tt estimatePatterns()} by default applies to both columns of counts.
+The sequencing error rate {\tt eta} is specified as a site-dependent array. 
 
 <<>>=
-estimatePatterns(patternsExample,
+estimates <- estimatePatterns(patternsExample,
                  epsilon=0.01, 
-                 eta=c(0.008, 0.01, 0.01, 0.01, 0.008), 
-                 column=2)
+                 eta=c(0.008, 0.01, 0.01, 0.01, 0.008))
+estimates
 @
 
-Note that in this example four patterns have been identified as spurious; they are patterns {\tt 01010}, {\tt 10001}, {\tt 10010} and {\tt 11000}.
+The ouput is a list of two data frames;
+now we plot the second data frame.
+Two plots are produced: the lower plot is the expanded version of the upper plot.
+
+
+<<fig=TRUE>>=
+plotMethylationPatterns(estimates[[2]])
+@
+
+\begin{thebibliography}{}
+\bibitem{Lin04}
+Lin, P., For\^et, S., Wilson, S.R.\ and Burden, C.J., {\it Estimation of amplicon methylation patterns from bisulphite sequencing data} (preprint)
+\end{thebibliography}
 
 \end{document}

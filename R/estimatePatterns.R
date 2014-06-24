@@ -1,7 +1,7 @@
 estimatePatterns <- function(patternCounts,
                              epsilon=0,
                              eta=0,
-                             column=-1,
+                             column=NULL,
                              fast=TRUE,
                              steps=20000)
 {
@@ -22,20 +22,20 @@ estimatePatterns <- function(patternCounts,
     patternCounts[, 1] <- patterns
     # Check Epsilon
     if (!is.numeric(epsilon) || epsilon < 0 || epsilon >= 1) {
-        stop('Epsilon must be a numeric between 0 and 1\n')
+        stop('epsilon must be a numeric between 0 and 1\n')
     }
 
     # Check Eta
     nEtas <- length(eta)
     if (nEtas != 1 && nEtas != nCpGsites) {
         stop('Length of eta is not equal to the number of CpG sites\n')
-    } else if (!is.numeric(eta) || any(eta < 0 || eta >= 1)) {
-        stop('Eta must be a numeric between 0 and 1\n')
+    } else if (!is.numeric(eta) || any(eta < 0) || any(eta >= 1)) {
+        stop('eta must be a numeric between 0 and 1\n')
     }
 
     # Check the column indices
     nColumns <- ncol(patternCounts) - 1
-    if (column == -1) {
+    if (is.null(column)) {
         columns <- 1:nColumns
     } else {
         columns <- column
@@ -53,6 +53,11 @@ estimatePatterns <- function(patternCounts,
                                                       fast,
                                                       steps)
     }
+    
+    if (length(columns) == 1) {
+        compareData <- compareData[[i]]
+    }
+        
     return(compareData)
 }
 
@@ -217,19 +222,22 @@ estimatePatternsOneColumn <- function(patternCounts,
         warning('Constrained optimisation did not converge.\n')
     }
 
-    compareData$spurious <- compareData$observedDistribution !=0 & compareData$estimatedDistribution == 0
+    compareData$Spurious <- compareData$observedDistribution !=0 & compareData$estimatedDistribution == 0
 
     return(compareData)
 }
 
 # Plot graphs.
 
-plotMethylationPatterns <- function(compareData, yLimit1=-1, yLimit2=-1)
+plotMethylationPatterns <- function(compareData, yLimit1=NULL, yLimit2=NULL)
 {
-      if(yLimit1 ==-1 ){
+      if(class(compareData) != "data.frame"){
+        stop("compareData must be a data.frame")
+      }
+      if(is.null(yLimit1)){
         yLimit1 <- ceiling(max(compareData$observedDistribution, compareData$estimatedDistribution) * 10.2) / 10
       }
-      if(yLimit2 ==-1 ){
+      if(is.null(yLimit2)){
         yLimit2 <- quantile(sort(compareData$observedDistribution), 0.9)
       }
 
