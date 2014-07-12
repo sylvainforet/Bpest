@@ -3,7 +3,8 @@
 \docType{data}
 \title{patternsExample}
 \description{
-   A data frame which contains a column of methylation patterns and two columns of counts
+   A data frame which contains a column of methylation patterns and two columns
+   of counts
 }
 \usage{data(patternsExample)}
 \format{

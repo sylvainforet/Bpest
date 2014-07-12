@@ -8,7 +8,9 @@
 }
 
 \description{
-  Estimate distribution of methylation patterns from a table of counts from a bisulphite sequencing experiment given a non-conversion rate and read error rate.
+  Estimate distribution of methylation patterns from a table of counts from a
+  bisulphite sequencing experiment given a non-conversion rate and sequencing
+  error rate.
 }
 
 \details{
@@ -19,7 +21,10 @@
     Date: \tab 2014-06-12\cr
     License: \tab GPL(>=3)\cr
   }
-  The main component of this package is the function \code{\link{estimatePatterns}} which reads a table of read counts of bisulphite sequencing data for a given amplicon and generates a table and plot of the estimated distribution over methylation patterns.
+  The main component of this package is the function \code{\link{estimatePatterns}}
+  which reads a table of read counts of bisulphite sequencing data for a given
+  amplicon and generates a table and plot of the estimated distribution over
+  methylation patterns.
 }
 
 \author{
@@ -43,7 +48,9 @@
 
 \examples{
   data(patternsExample)
-  estimatePatterns(patternsExample, epsilon=0.02, eta=0.01, column=2)
+  estimates <- estimatePatterns(patternsExample, epsilon=0.02, eta=0.01)
+  estimates
+  plotPatterns(estimates[[2]])
 }
 
 % vim:ts=2:sw=2:sts=2:expandtab:
