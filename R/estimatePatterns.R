@@ -53,11 +53,11 @@ estimatePatterns <- function(patternCounts,
                                                       fast,
                                                       steps)
     }
-    
+
     if (length(columns) == 1) {
         compareData <- compareData[[i]]
     }
-        
+
     return(compareData)
 }
 
@@ -222,14 +222,16 @@ estimatePatternsOneColumn <- function(patternCounts,
         warning('Constrained optimisation did not converge.\n')
     }
 
-    compareData$Spurious <- compareData$observedDistribution !=0 & compareData$estimatedDistribution == 0
+    compareData$spurious <- compareData$observedDistribution !=0 & compareData$estimatedDistribution == 0
 
     return(compareData)
 }
 
 # Plot graphs.
 
-plotPatterns <- function(compareData, yLimit1=NULL, yLimit2=NULL)
+plotPatterns <- function(compareData,
+                         yLimit1=NULL,
+                         yLimit2=NULL)
 {
       if(class(compareData) != "data.frame"){
         stop("compareData must be a data.frame")

@@ -5,7 +5,9 @@
   Estimate distribution of methylation patterns
 }
 \description{
-  Estimate distribution of methylation patterns from a table of counts from a bisulphite sequencing experiment given a non-conversion rate and a sequencing error rate
+  Estimate distribution of methylation patterns from a table of counts from a
+  bisulphite sequencing experiment given a non-conversion rate and a sequencing
+  error rate.
 }
 \usage{
   estimatePatterns(patternCounts,
@@ -18,30 +20,35 @@
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{patternCounts}{
-    data frame with methylation patterns in first column and pattern counts in subsequent columns
+    data frame with methylation patterns in first column and pattern counts in
+    subsequent columns.
   }
   \item{epsilon}{
-    non-converson rate, a value between 0 and 1
+    non-converson rate, a value between 0 and 1.
   }
   \item{eta}{
-    error rate, either a vector of numbers between 0 and 1 of length equal to the number of CpG sites or a single value between 0 and 1 for a single error rate across all sites
+    error rate, either a vector of numbers between 0 and 1 of length equal to
+    the number of CpG sites or a single value between 0 and 1 for a single error
+    rate across all sites.
   }
   \item{column}{
-    index of the column of `patternCounts' to process, an integer value from 1 to the number of pattern counts columns in `patternCounts'.  If NULL defaults to all columns
+    index of the column of `patternCounts' to process, an integer value from 1
+    to the number of pattern counts columns in `patternCounts'.  If NULL, defaults
+    to all columns.
   }
   \item{fast}{
-    logical, if TRUE, fast version implemented (default)
+    logical, if TRUE, fast version implemented (default).
   }
   \item{steps}{
-    number of steps for the optimiser, passed to \code{\link{constrOptim}}
+    number of steps for the optimiser, passed to \code{\link{constrOptim}}.
   }
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-If a single column is specified, returns a data.frame.
-If multiple columns are specfied, returns a list
+If a single column is specified, returns a data frame.
+If multiple columns are specfied, returns a list of data frames.
 }
 \references{
 %% ~put references to the literature/web site here ~
@@ -71,7 +78,7 @@ If multiple columns are specfied, returns a list
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{ ~DNA methylation }
+\keyword{ ~Methylation pattern}% __ONLY ONE__ keyword per line
 
 % vim:ts=2:sw=2:sts=2:expandtab:
