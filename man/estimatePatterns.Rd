@@ -49,12 +49,19 @@
 \value{
 If a single column is specified, returns a data frame.
 If multiple columns are specfied, returns a list of data frames.
+
+The data frame(s) contain the following columns:
+  \item{pattern} the list of input patterns (factor)
+  \item{coverage} the number of reads for each pattern (integer)
+  \item{observedDistribution} the observed frequencies of each pattern (numeric)
+  \item{estimatedDistribution} the estimated frequencies (numeric)
+  \item{spurious} indicates whether the patterns are real or spurious (logical)
 }
 \references{
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+  Peijie Lin, Sylvain Foret, Conrad Burden
 }
 \note{
 %%  ~~further notes~~
@@ -78,7 +85,7 @@ If multiple columns are specfied, returns a list of data frames.
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~DNA methylation }
-\keyword{ ~Methylation pattern}% __ONLY ONE__ keyword per line
+% \keyword{ ~kwd1 }
+% \keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
 
 % vim:ts=2:sw=2:sts=2:expandtab:

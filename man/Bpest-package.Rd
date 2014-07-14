@@ -2,7 +2,6 @@
 \alias{Bpest-package}
 \alias{Bpest}
 \docType{package}
-\encoding{latin1}
 \title{
   Bpest
 }
@@ -28,7 +27,7 @@
 }
 
 \author{
-  Peijie Lin, Sylvain Forêt, Conrad Burden
+  Peijie Lin, Sylvain Foret, Conrad Burden
 
   Maintainer: conrad.burden@anu.edu.au
 }
