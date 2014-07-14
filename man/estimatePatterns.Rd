@@ -51,11 +51,21 @@ If a single column is specified, returns a data frame.
 If multiple columns are specfied, returns a list of data frames.
 
 The data frame(s) contain the following columns:
-  \item{pattern} the list of input patterns (factor)
-  \item{coverage} the number of reads for each pattern (integer)
-  \item{observedDistribution} the observed frequencies of each pattern (numeric)
-  \item{estimatedDistribution} the estimated frequencies (numeric)
-  \item{spurious} indicates whether the patterns are real or spurious (logical)
+  \item{pattern}{
+    the list of input patterns (factor)
+  }
+  \item{coverage}{
+    the number of reads for each pattern (integer)
+  }
+  \item{observedDistribution}{
+    the observed frequencies of each pattern (numeric)
+  }
+  \item{estimatedDistribution}{
+    the estimated frequencies (numeric)
+  }
+  \item{spurious}{
+    indicates whether the patterns are real or spurious (logical)
+  }
 }
 \references{
 %% ~put references to the literature/web site here ~

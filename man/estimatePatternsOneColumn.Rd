@@ -30,7 +30,7 @@ Please refer to \code{\link{estimatePatterns}}
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+  Peijie Lin, Sylvain Foret, Conrad Burden
 }
 \note{
 %%  ~~further notes~~
