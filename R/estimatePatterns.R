@@ -70,7 +70,7 @@ estimatePatternsOneColumn <- function(patternCounts,
 {
     patternCounts <- patternCounts[, c(1, column + 1)]
     names(patternCounts) <- c('patterns','counts')
-    patternCounts <- patternCounts[patternCounts$Counts !=0, ]
+    patternCounts <- patternCounts[patternCounts$counts !=0, ]
     nCpGsites <- nchar(patternCounts$patterns[1])
 
     # Create the vector of patterns
@@ -95,7 +95,7 @@ estimatePatternsOneColumn <- function(patternCounts,
             }
     }
 
-    yPatterns <- methData$Counts
+    yPatterns <- methData$counts
     totalPatterns <- sum(yPatterns)
     readDistribution <- yPatterns / totalPatterns
     patternsMax <- which.max(yPatterns)
@@ -169,7 +169,7 @@ estimatePatternsOneColumn <- function(patternCounts,
         return(expanded)
     }
 
-    likelihoodOpt <- function(theta){
+    likelihoodOpt <- function(theta) {
         likelihoodOpted <- likelihood(expand(theta, patternsMax))
         return(likelihoodOpted)
     }
@@ -233,13 +233,13 @@ plotPatterns <- function(compareData,
                          yLimit1=NULL,
                          yLimit2=NULL)
 {
-      if(class(compareData) != "data.frame"){
+      if(class(compareData) != "data.frame") {
         stop("compareData must be a data.frame")
       }
-      if(is.null(yLimit1)){
+      if(is.null(yLimit1)) {
         yLimit1 <- ceiling(max(compareData$observedDistribution, compareData$estimatedDistribution) * 10.2) / 10
       }
-      if(is.null(yLimit2)){
+      if(is.null(yLimit2)) {
         yLimit2 <- quantile(sort(compareData$observedDistribution), 0.9)
       }
 
