@@ -54,10 +54,6 @@ estimatePatterns <- function(patternCounts,
                                                       steps)
     }
 
-    if (length(columns) == 1) {
-        compareData <- compareData[[i]]
-    }
-
     return(compareData)
 }
 
