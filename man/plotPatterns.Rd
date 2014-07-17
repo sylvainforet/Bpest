@@ -36,7 +36,7 @@
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+  Peijie Lin, Sylvain Foret, Conrad Burden
 }
 \note{
 %%  ~~further notes~~
@@ -53,17 +53,11 @@
                                 epsilon=0.02, 
                                 eta=0.01)
   plotPatterns(estimates[[1]])
-  
-  estimates1 <- estimatePatterns(patternsExample, 
-                                 epsilon=0.02, 
-                                 eta=0.01, 
-                                 column=1)
-  plotPatterns(estimates1, yLimit2=0.05)
 }
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+% \keyword{ ~kwd1 }
+% \keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
 
 % vim:ts=2:sw=2:sts=2:expandtab:

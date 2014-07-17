@@ -9,7 +9,12 @@
 Please refer to \code{\link{estimatePatterns}}
 }
 \usage{
-
+  estimatePatterns(patternCounts,
+                   epsilon,
+                   eta,
+                   column,
+                   fast,
+                   steps)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -25,7 +30,7 @@ Please refer to \code{\link{estimatePatterns}}
 %% ~put references to the literature/web site here ~
 }
 \author{
-%%  ~~who you are~~
+  Peijie Lin, Sylvain Foret, Conrad Burden
 }
 \note{
 %%  ~~further notes~~
@@ -42,7 +47,7 @@ Please refer to \code{\link{estimatePatterns}}
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
+\keyword{ internal }
 \keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
 
 % vim:ts=2:sw=2:sts=2:expandtab:

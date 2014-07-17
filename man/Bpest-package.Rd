@@ -2,7 +2,6 @@
 \alias{Bpest-package}
 \alias{Bpest}
 \docType{package}
-\encoding{latin1}
 \title{
   Bpest
 }
@@ -21,14 +20,14 @@
     Date: \tab 2014-06-12\cr
     License: \tab GPL(>=3)\cr
   }
-  The main component of this package is the function \code{\link{estimatePatterns}}
+  The main component of this package is the function \code{\link{estimatePatterns}}, 
   which reads a table of read counts of bisulphite sequencing data for a given
   amplicon and generates a table and plot of the estimated distribution over
   methylation patterns.
 }
 
 \author{
-  Peijie Lin, Sylvain Forêt, Conrad Burden
+  Peijie Lin, Sylvain Foret, Conrad Burden
 
   Maintainer: conrad.burden@anu.edu.au
 }

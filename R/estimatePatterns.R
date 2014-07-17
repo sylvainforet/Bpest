@@ -45,17 +45,13 @@ estimatePatterns <- function(patternCounts,
     }
 
     compareData <- list()
-    for (i in columns) {
+    for (i in 1:length(columns)) {
         compareData[[i]] <- estimatePatternsOneColumn(patternCounts,
                                                       epsilon,
                                                       eta,
-                                                      column=i,
+                                                      column=columns[i],
                                                       fast,
                                                       steps)
-    }
-
-    if (length(columns) == 1) {
-        compareData <- compareData[[i]]
     }
 
     return(compareData)
@@ -69,9 +65,9 @@ estimatePatternsOneColumn <- function(patternCounts,
                                       steps)
 {
     patternCounts <- patternCounts[, c(1, column + 1)]
-    names(patternCounts) <- c('Patterns','Counts')
-    patternCounts <- patternCounts[patternCounts$Counts !=0, ]
-    nCpGsites <- nchar(patternCounts$Patterns[1])
+    names(patternCounts) <- c('patterns','counts')
+    patternCounts <- patternCounts[patternCounts$counts !=0, ]
+    nCpGsites <- nchar(patternCounts$patterns[1])
 
     # Create the vector of patterns
 
@@ -85,17 +81,17 @@ estimatePatternsOneColumn <- function(patternCounts,
                 mPattern[i, 1] <- paste(cytosineBinary[i, ], collapse='')
             }
             counts <- array(0, dim=c(2^nCpGsites,1))
-            methData <- data.frame(Patterns=mPattern, Counts=counts)
-            methData$Patterns <- as.character(methData$Patterns)
+            methData <- data.frame(patterns=mPattern, counts=counts)
+            methData$patterns <- as.character(methData$patterns)
             for(i in 1:(2 ^ nCpGsites)) {
-                patternMatches <- patternCounts$Patterns == mPattern[i, 1]
+                patternMatches <- patternCounts$patterns == mPattern[i, 1]
                 if(any(patternMatches)) {
                     methData[i, 2] <- patternCounts[patternMatches, 2]
                 }
             }
     }
 
-    yPatterns <- methData$Counts
+    yPatterns <- methData$counts
     totalPatterns <- sum(yPatterns)
     readDistribution <- yPatterns / totalPatterns
     patternsMax <- which.max(yPatterns)
@@ -116,7 +112,7 @@ estimatePatternsOneColumn <- function(patternCounts,
      patternArray <- array(dim=c(size, nCpGsites))
 
      for (i in 1:size) {
-      patternArray[i, ] <- stringToVector(methData$Patterns[i])
+      patternArray[i, ] <- stringToVector(methData$patterns[i])
      }
 
      # Construct the conversion matrix
@@ -169,7 +165,7 @@ estimatePatternsOneColumn <- function(patternCounts,
         return(expanded)
     }
 
-    likelihoodOpt <- function(theta){
+    likelihoodOpt <- function(theta) {
         likelihoodOpted <- likelihood(expand(theta, patternsMax))
         return(likelihoodOpted)
     }
@@ -208,8 +204,8 @@ estimatePatternsOneColumn <- function(patternCounts,
 
     # Generate output
 
-    compareData <- data.frame(Pattern=methData$Patterns,
-                              Coverage=yPatterns,
+    compareData <- data.frame(pattern=methData$patterns,
+                              coverage=yPatterns,
                               observedDistribution=readDistribution,
                               estimatedDistribution=minZeros)
 
@@ -233,13 +229,13 @@ plotPatterns <- function(compareData,
                          yLimit1=NULL,
                          yLimit2=NULL)
 {
-      if(class(compareData) != "data.frame"){
+      if(class(compareData) != "data.frame") {
         stop("compareData must be a data.frame")
       }
-      if(is.null(yLimit1)){
+      if(is.null(yLimit1)) {
         yLimit1 <- ceiling(max(compareData$observedDistribution, compareData$estimatedDistribution) * 10.2) / 10
       }
-      if(is.null(yLimit2)){
+      if(is.null(yLimit2)) {
         yLimit2 <- quantile(sort(compareData$observedDistribution), 0.9)
       }
 
@@ -255,12 +251,12 @@ plotPatterns <- function(compareData,
            ylim=c(0, yLimit1))
       points(compareData$estimatedDistribution, pch=4, col='red')
       par(new=TRUE)
-      plot(compareData$Coverage,
+      plot(compareData$coverage,
            col='blue',
            pch=3,
            xlab='',
            ylab='',
-           ylim=c(0, sum(compareData$Coverage) * yLimit1),
+           ylim=c(0, sum(compareData$coverage) * yLimit1),
            axes=FALSE)
       axis(side=4)
       mtext('coverage', side=4, line=2.5)
@@ -280,14 +276,14 @@ plotPatterns <- function(compareData,
            ylim=c(0, yLimit2))
       points(compareData$estimatedDistribution, pch=4, col='red')
       par(new=TRUE)
-      plot(compareData$Coverage,
+      plot(compareData$coverage,
            col='blue',
            pch=3,
            xlab='',
            ylab='',
-           ylim=c(0,sum(compareData$Coverage)*yLimit2),
+           ylim=c(0,sum(compareData$coverage) * yLimit2),
            axes=FALSE)
-      axis(side=4, at=c(compareData$Coverage, 0, 10))
+      axis(side=4, at=c(compareData$coverage, 0, 10))
       mtext('coverage', side=4, line=2.5)
       abline(0, 0, col='grey')
 }
