@@ -47,10 +47,9 @@
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-If a single column is specified, returns a data frame.
-If multiple columns are specfied, returns a list of data frames.
+The function returns a list of data frames.
 
-The data frame(s) contain the following columns:
+The data frames contain the following columns:
   \item{pattern}{
     the list of input patterns (factor)
   }

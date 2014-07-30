@@ -45,11 +45,11 @@ estimatePatterns <- function(patternCounts,
     }
 
     compareData <- list()
-    for (i in columns) {
+    for (i in 1:length(columns)) {
         compareData[[i]] <- estimatePatternsOneColumn(patternCounts,
                                                       epsilon,
                                                       eta,
-                                                      column=i,
+                                                      column=columns[i],
                                                       fast,
                                                       steps)
     }
